@@ -4,10 +4,16 @@ import com.ashu.Employee;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.ResultReader;
+import org.springframework.jdbc.core.ResultSetExtractor;
+
 import java.sql.PreparedStatement;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeDao  {
     private JdbcTemplate jdbcTemplate;
@@ -30,6 +36,23 @@ public class EmployeeDao  {
         return jdbcTemplate.update(query);
     }
 
+    public Object getAllEmployees(){
+        String query = "select * from employee";
+        return jdbcTemplate.query(query, new ResultSetExtractor() {
+           @Override
+           public List<Employee> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+               List<Employee> list = new ArrayList<>();
+               while (resultSet.next()){
+                   Employee e = new Employee();
+                   e.setId(resultSet.getInt(1));
+                   e.setName(resultSet.getString(2));
+                   e.setSalary(resultSet.getInt(3));
+                   list.add(e);
+               }
+               return list;
+           }
+       });
+    }
     public Object saveEmployeeWithPreparedStatement(final Employee e){
         String query = "Insert into employee(id,name,salary) values(?,?,?)";
         return jdbcTemplate.execute(query, new PreparedStatementCallback() {
