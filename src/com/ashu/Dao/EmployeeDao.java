@@ -2,10 +2,7 @@ package com.ashu.Dao;
 
 import com.ashu.Employee;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCallback;
-import org.springframework.jdbc.core.ResultReader;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.*;
 
 import java.sql.PreparedStatement;
 
@@ -36,7 +33,7 @@ public class EmployeeDao  {
         return jdbcTemplate.update(query);
     }
 
-    public Object getAllEmployees(){
+    /*public Object getAllEmployees(){
         String query = "select * from employee";
         return jdbcTemplate.query(query, new ResultSetExtractor() {
            @Override
@@ -52,6 +49,20 @@ public class EmployeeDao  {
                return list;
            }
        });
+    }*/
+
+    public List<Employee> getAllEmployees(){
+        String query = "select * from employee";
+        return jdbcTemplate.query(query, new RowMapper() {
+            @Override
+            public Employee mapRow(ResultSet resultSet, int i) throws SQLException {
+                Employee e = new Employee();
+                e.setId(resultSet.getInt(1));
+                e.setName(resultSet.getString(2));
+                e.setSalary(resultSet.getInt(3));
+                return e;
+            }
+        });
     }
     public Object saveEmployeeWithPreparedStatement(final Employee e){
         String query = "Insert into employee(id,name,salary) values(?,?,?)";

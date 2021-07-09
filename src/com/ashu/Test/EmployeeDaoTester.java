@@ -14,11 +14,12 @@ public class EmployeeDaoTester {
         EmployeeDao employeeDao = (EmployeeDao)context.getBean("employeedao");
         /*int status = employeeDao.saveEmployee(new Employee(1,"Amit",10000));
         System.out.println(status);*/
-        final Employee e = new Employee(3,"Ashish",12000);
+        /*final Employee e = new Employee(3,"Ashish",12000);
         Object status = employeeDao.saveEmployeeWithPreparedStatement(e);
         if(status == null)
-            System.out.println("Record inserted successfully");
-       List<Employee> employeeList =  (List<Employee>)employeeDao.getAllEmployees();
+            System.out.println("Record inserted successfully");*/
+       /*List<Employee> employeeList =  (List<Employee>)employeeDao.getAllEmployees();*/
+        List<Employee> employeeList =  employeeDao.getAllEmployees();
         Iterator itr = employeeList.iterator();
         while (itr.hasNext()){
             System.out.println(itr.next());
